@@ -466,10 +466,8 @@ module Fluent
             Zlib::GzipReader.open(download_path) do |gz|
             Archive::Tar::Minitar.unpack(gz, './tmp')
           end
-          log.info "temp_database_path: %s" %  tmp_database_path
           src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
-          log.info "temp_database_path: %s" %  tmp_database_path
-          FileUtils.mv(src_path, tmp_database_path)
+          FileUtils.mv(src_path, download_path)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
