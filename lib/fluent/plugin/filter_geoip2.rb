@@ -3,6 +3,10 @@ require 'json'
 require 'fileutils'
 require 'open-uri'
 
+require 'zlib'
+require 'archive/tar/minitar'
+require 'fileutils'
+
 module Fluent
   class GeoIP2Filter < Filter
     Fluent::Plugin.register_filter('geoip2', self)
@@ -457,11 +461,9 @@ module Fluent
         tmp_database_path = database_dir + '/tmp_' + File.basename(database_path)
         begin
           log.info "Unzip: %s" % download_path
-          open(tmp_database_path, 'wb') do |output|
-            Zlib::GzipReader.open(download_path) do |gz|
-              output.write(gz.read)
-            end
-          end
+          Archive::Tar::Minitar.unpack(Zlib::GzipReader.new(File.open("GeoLite2-City.tar.gz", 'rb')), './tmp')
+          FileUtils.mv(Dir.glob('./tmp/' + File.basename("GeoLite2-City.tar.gz", ".tar.gz") + '_*/GeoLite2-City.mmdb')[0], database_city_path)
+          FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
           puts e.message
