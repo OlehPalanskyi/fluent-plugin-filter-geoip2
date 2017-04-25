@@ -103,7 +103,7 @@ module Fluent
         download_database @download_city_url, @md5_city_url, @database_city_path, @md5_city_path
       end
 
-      @database = MaxMindDB.new(@database_path)
+      @database = MaxMindDB.new(@database_city_path)
     end
 
     def filter(tag, time, record)
