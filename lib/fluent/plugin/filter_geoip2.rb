@@ -464,14 +464,14 @@ module Fluent
         begin
           log.info "Unzip: %s" % download_path
           open(tmp_database_path, 'wb') do |output|
-            Zlib::GzipReader.new(File.open(download_path)) do |gz|
-            Archive::Tar::Minitar.unpack(gz, './tmp')
+            Zlib::GzipReader.open(download_path) do |gz|
+            output.write(gz.read)
             end
           end
 
-          src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
-          FileUtils.mv(src_path, tmp_database_path)
-          FileUtils.rm_rf('./tmp')
+#          src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
+#          FileUtils.mv(src_path, tmp_database_path)
+#          FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
           puts e.message
