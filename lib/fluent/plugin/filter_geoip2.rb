@@ -483,7 +483,7 @@ module Fluent
         db_path = database_dir + '/' + File.basename(database_path)
         if fetched_md5 == temp_md5 then
           log.info "Rename: %s to %s" % [db_path, database_path]
-          FileUtils.mv(db_path, database_path)
+#          FileUtils.mv(db_path, database_path)
           log.info "Rename done: %s to %s" % [db_path, database_path]
 
           # record new md5
