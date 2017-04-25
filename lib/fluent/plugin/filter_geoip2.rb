@@ -467,8 +467,8 @@ module Fluent
             end
           end
 
-#          src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
-#          FileUtils.mv(src_path, tmp_database_path)
+          src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')[0].to_s
+          FileUtils.mv(src_path, tmp_database_path)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
@@ -479,9 +479,9 @@ module Fluent
         temp_md5 = Digest::MD5.hexdigest(File.open(download_path, 'rb').read)
         log.info "New MD5: %s" % temp_md5
         if fetched_md5 == temp_md5 then
-          log.info "Rename: %s to %s" % [Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb'), database_path]
-          FileUtils.mv(Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb'), database_path)
-          log.info "Rename done: %s to %s" % [Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb'), database_path]
+          log.info "Rename: %s to %s" % [tmp_database_path, database_path]
+          FileUtils.mv(tmp_database_path, database_path)
+          log.info "Rename done: %s to %s" % [tmp_database_path, database_path]
 
           # record new md5
           log.info "Save: %s" % md5_path
