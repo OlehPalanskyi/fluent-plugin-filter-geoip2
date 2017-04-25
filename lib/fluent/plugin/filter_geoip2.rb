@@ -469,6 +469,7 @@ module Fluent
           src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
           log.info "src_path %s" % src_path
           log.info "database_path %s" % database_path
+          log.info "database_dir %s" % database_dir
           FileUtils.mv(src_path, database_dir)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
