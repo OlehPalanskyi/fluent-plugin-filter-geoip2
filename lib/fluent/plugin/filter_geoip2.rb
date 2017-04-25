@@ -8,10 +8,11 @@ module Fluent
     Fluent::Plugin.register_filter('geoip2', self)
 
     DEFAULT_ENABLE_DOWNLOAD = true
-    DEFAULT_MD5_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5'
-    DEFAULT_DOWNLOAD_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz'
-    DEFAULT_MD5_PATH = './geoip/database/GeoLite2-City.md5'
-    DEFAULT_DATABASE_PATH = './geoip/database/GeoLite2-City.mmdb'
+
+    DEFAULT_MD5_CITY_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5'
+    DEFAULT_DOWNLOAD_CITY_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz'
+    DEFAULT_MD5_CITY_PATH = './geoip/database/GeoLite2-City.md5'
+    DEFAULT_DATABASE_CITY_PATH = './geoip/database/GeoLite2-City.mmdb'
 
     DEFAULT_LOOKUP_FIELD = 'ip'
     DEFAULT_OUTPU_FIELD = 'geoip'
@@ -34,17 +35,17 @@ module Fluent
     config_param :enable_auto_download, :bool, :default => DEFAULT_ENABLE_DOWNLOAD,
                  :desc => 'If true, enable to download GeoIP2 database autometically (default: %s).' % DEFAULT_ENABLE_DOWNLOAD
 
-    config_param :md5_url, :string, :default => DEFAULT_MD5_URL,
-                 :desc => 'GeoIP2 MD5 checksum URL (default: %s)' % DEFAULT_MD5_URL
+    config_param :md5_city_url, :string, :default => DEFAULT_MD5_CITY_URL,
+                 :desc => 'GeoIP2 MD5 checksum URL (default: %s)' % DEFAULT_MD5_CITY_URL
 
-    config_param :download_url, :string, :default => DEFAULT_DOWNLOAD_URL,
-                 :desc => 'GeoIP2 database download URL (default: %s).' % DEFAULT_DOWNLOAD_URL
+    config_param :download_city_url, :string, :default => DEFAULT_DOWNLOAD_CITY_URL,
+                 :desc => 'GeoIP2 database download URL (default: %s).' % DEFAULT_DOWNLOAD_CITY_URL
 
-    config_param :md5_path, :string, :default => DEFAULT_MD5_PATH,
-                 :desc => 'GeoIP2 MD5 checksum path. (default: %s)' % DEFAULT_MD5_PATH
+    config_param :md5_city_path, :string, :default => DEFAULT_MD5_CITY_PATH,
+                 :desc => 'GeoIP2 MD5 checksum path. (default: %s)' % DEFAULT_MD5_CITY_PATH
 
-    config_param :database_path, :string, :default => DEFAULT_DATABASE_PATH,
-                 :desc => 'GeoIP2 database path. (default: %s)' % DEFAULT_DATABASE_PATH
+    config_param :database_city_path, :string, :default => DEFAULT_DATABASE_CITY_PATH,
+                 :desc => 'GeoIP2 database path. (default: %s)' % DEFAULT_DATABASE_CITY_PATH
 
     config_param :lookup_field, :string, :default => DEFAULT_LOOKUP_FIELD,
                  :desc => 'Specify the field name that IP address is stored (default: %s).' % DEFAULT_LOOKUP_FIELD
@@ -99,7 +100,7 @@ module Fluent
       super
 
       if enable_auto_download then
-        download_database @download_url, @md5_url, @database_path, @md5_path
+        download_database @download_city_url, @md5_city_url, @database_city_path, @md5_city_path
       end
 
       @database = MaxMindDB.new(@database_path)
