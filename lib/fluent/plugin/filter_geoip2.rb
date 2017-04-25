@@ -4,7 +4,7 @@ require 'fileutils'
 require 'open-uri'
 
 module Fluent
-  class GeoIP2Filter < Filter
+  class geoip2Filter < Filter
     Fluent::Plugin.register_filter('geoip2', self)
 
     DEFAULT_ENABLE_DOWNLOAD = true
@@ -25,12 +25,12 @@ module Fluent
     DEFAULT_CONTINENT = true
     DEFAULT_COUNTRY = true
     DEFAULT_LOCATION = true
-    DEFAULT_POSTAL = true
-    DEFAULT_REGISTERED_COUNTRY = true
-    DEFAULT_REPRESENTED_COUNTRY = true
-    DEFAULT_SUBDIVISIONS = true
-    DEFAULT_TRAITS = true
-    DEFAULT_CONNECTION_TYPE = true
+    DEFAULT_POSTAL = false
+    DEFAULT_REGISTERED_COUNTRY = false
+    DEFAULT_REPRESENTED_COUNTRY = false
+    DEFAULT_SUBDIVISIONS = false
+    DEFAULT_TRAITS = false
+    DEFAULT_CONNECTION_TYPE = false
 
     config_param :enable_auto_download, :bool, :default => DEFAULT_ENABLE_DOWNLOAD,
                  :desc => 'If true, enable to download GeoIP2 database autometically (default: %s).' % DEFAULT_ENABLE_DOWNLOAD
@@ -103,7 +103,7 @@ module Fluent
         download_database @download_city_url, @md5_city_url, @database_city_path, @md5_city_path
       end
 
-      @database = MaxMindDB.new(@database_city_path)
+      @database_city = MaxMindDB.new(@database_city_path)
     end
 
     def filter(tag, time, record)
@@ -111,15 +111,15 @@ module Fluent
 
       unless ip.nil? then
 
-        geoip = {}
+        geoip_city = {}
         begin
-          geoip = @database.lookup(ip)
+          geoip_city = @database_city.lookup(ip)
         rescue IPAddr::InvalidAddressError => e
           # Do nothing if if InvalidAddressError
           return record
         end
 
-        if geoip.found? then
+        if geoip_city.found? then
 
           unless @flatten then
             record.merge!({@output_field => {}})
@@ -128,17 +128,17 @@ module Fluent
           if @continent then
             continent_hash = {}
 
-            unless geoip.continent.code.nil? then
-              continent_hash['code'] = geoip.continent.code
+            unless geoip_city.continent.code.nil? then
+              continent_hash['code'] = geoip_city.continent.code
             end
-            unless geoip.continent.geoname_id.nil? then
-              continent_hash['geoname_id'] = geoip.continent.geoname_id
+            unless geoip_city.continent.geoname_id.nil? then
+              continent_hash['geoname_id'] = geoip_city.continent.geoname_id
             end
-            unless geoip.continent.iso_code.nil? then
-              continent_hash['iso_code'] = geoip.continent.iso_code
+            unless geoip_city.continent.iso_code.nil? then
+              continent_hash['iso_code'] = geoip_city.continent.iso_code
             end
-            unless geoip.continent.name(@locale).nil? then
-              continent_hash['name'] = geoip.continent.name(@locale)
+            unless geoip_city.continent.name(@locale).nil? then
+              continent_hash['name'] = geoip_city.continent.name(@locale)
             end
 
             unless continent_hash.empty? then
@@ -153,17 +153,17 @@ module Fluent
           if @country then
             country_hash = {}
 
-            unless geoip.country.code.nil? then
-              country_hash['code'] = geoip.country.code
+            unless geoip_city.country.code.nil? then
+              country_hash['code'] = geoip_city.country.code
             end
-            unless geoip.country.geoname_id.nil? then
-              country_hash['geoname_id'] = geoip.country.geoname_id
+            unless geoip_city.country.geoname_id.nil? then
+              country_hash['geoname_id'] = geoip_city.country.geoname_id
             end
-            unless geoip.country.iso_code.nil? then
-              country_hash['iso_code'] = geoip.country.iso_code
+            unless geoip_city.country.iso_code.nil? then
+              country_hash['iso_code'] = geoip_city.country.iso_code
             end
-            unless geoip.country.name(@locale).nil? then
-              country_hash['name'] = geoip.country.name(@locale)
+            unless geoip_city.country.name(@locale).nil? then
+              country_hash['name'] = geoip_city.country.name(@locale)
             end
 
             unless country_hash.empty? then
@@ -178,17 +178,17 @@ module Fluent
           if @city then
             city_hash = {}
 
-            unless geoip.city.code.nil? then
-              city_hash['code'] = geoip.city.code
+            unless geoip_city.city.code.nil? then
+              city_hash['code'] = geoip_city.city.code
             end
-            unless geoip.city.geoname_id.nil? then
-              city_hash['geoname_id'] = geoip.city.geoname_id
+            unless geoip_city.city.geoname_id.nil? then
+              city_hash['geoname_id'] = geoip_city.city.geoname_id
             end
-            unless geoip.city.iso_code.nil? then
-              city_hash['iso_code'] = geoip.city.iso_code
+            unless geoip_city.city.iso_code.nil? then
+              city_hash['iso_code'] = geoip_city.city.iso_code
             end
-            unless geoip.city.name(@locale).nil? then
-              city_hash['name'] = geoip.city.name(@locale)
+            unless geoip_city.city.name(@locale).nil? then
+              city_hash['name'] = geoip_city.city.name(@locale)
             end
 
             unless city_hash.empty? then
@@ -203,17 +203,17 @@ module Fluent
           if @location then
             location_hash = {}
 
-            unless geoip.location.latitude.nil? then
-              location_hash['latitude'] = geoip.location.latitude
+            unless geoip_city.location.latitude.nil? then
+              location_hash['latitude'] = geoip_city.location.latitude
             end
-            unless geoip.location.longitude.nil? then
-              location_hash['longitude'] = geoip.location.longitude
+            unless geoip_city.location.longitude.nil? then
+              location_hash['longitude'] = geoip_city.location.longitude
             end
-            unless geoip.location.metro_code.nil? then
-              location_hash['metro_code'] = geoip.location.metro_code
+            unless geoip_city.location.metro_code.nil? then
+              location_hash['metro_code'] = geoip_city.location.metro_code
             end
-            unless geoip.location.time_zone.nil? then
-              location_hash['time_zone'] = geoip.location.time_zone
+            unless geoip_city.location.time_zone.nil? then
+              location_hash['time_zone'] = geoip_city.location.time_zone
             end
 
             unless location_hash.empty? then
@@ -228,8 +228,8 @@ module Fluent
           if @postal then
             postal_hash = {}
 
-            unless geoip.postal.code.nil? then
-              postal_hash['code'] = geoip.postal.code
+            unless geoip_city.postal.code.nil? then
+              postal_hash['code'] = geoip_city.postal.code
             end
 
             unless postal_hash.empty? then
@@ -244,17 +244,17 @@ module Fluent
           if @registered_country then
             registered_country_hash = {}
 
-            unless geoip.registered_country.code.nil? then
-              registered_country_hash['code'] = geoip.registered_country.code
+            unless geoip_city.registered_country.code.nil? then
+              registered_country_hash['code'] = geoip_city.registered_country.code
             end
-            unless geoip.registered_country.geoname_id.nil? then
-              registered_country_hash['geoname_id'] = geoip.registered_country.geoname_id
+            unless geoip_city.registered_country.geoname_id.nil? then
+              registered_country_hash['geoname_id'] = geoip_city.registered_country.geoname_id
             end
-            unless geoip.registered_country.iso_code.nil? then
-              registered_country_hash['iso_code'] = geoip.registered_country.iso_code
+            unless geoip_city.registered_country.iso_code.nil? then
+              registered_country_hash['iso_code'] = geoip_city.registered_country.iso_code
             end
-            unless geoip.registered_country.name(@locale).nil? then
-              registered_country_hash['name'] = geoip.registered_country.name(@locale)
+            unless geoip_city.registered_country.name(@locale).nil? then
+              registered_country_hash['name'] = geoip_city.registered_country.name(@locale)
             end
 
             unless registered_country_hash.empty? then
@@ -269,17 +269,17 @@ module Fluent
           if @represented_country then
             represented_country_hash = {}
 
-            unless geoip.represented_country.code.nil? then
-              represented_country_hash['code'] = geoip.represented_country.code
+            unless geoip_city.represented_country.code.nil? then
+              represented_country_hash['code'] = geoip_city.represented_country.code
             end
-            unless geoip.represented_country.geoname_id.nil? then
-              represented_country_hash['geoname_id'] = geoip.represented_country.geoname_id
+            unless geoip_city.represented_country.geoname_id.nil? then
+              represented_country_hash['geoname_id'] = geoip_city.represented_country.geoname_id
             end
-            unless geoip.represented_country.iso_code.nil? then
-              represented_country_hash['iso_code'] = geoip.represented_country.iso_code
+            unless geoip_city.represented_country.iso_code.nil? then
+              represented_country_hash['iso_code'] = geoip_city.represented_country.iso_code
             end
-            unless geoip.represented_country.name(@locale).nil? then
-              represented_country_hash['name'] = geoip.represented_country.name(@locale)
+            unless geoip_city.represented_country.name(@locale).nil? then
+              represented_country_hash['name'] = geoip_city.represented_country.name(@locale)
             end
 
             unless represented_country_hash.empty? then
@@ -295,7 +295,7 @@ module Fluent
             subdivision_arry = []
 
             i = 0
-            geoip.subdivisions.each do |subdivision|
+            geoip_city.subdivisions.each do |subdivision|
               subdivision_hash = {}
 
               unless subdivision.code.nil? then
@@ -332,11 +332,11 @@ module Fluent
           if @traits then
             traits_hash = {}
 
-            unless geoip.traits.is_anonymous_proxy.nil? then
-              traits_hash['is_anonymous_proxy'] = geoip.traits.is_anonymous_proxy
+            unless geoip_city.traits.is_anonymous_proxy.nil? then
+              traits_hash['is_anonymous_proxy'] = geoip_city.traits.is_anonymous_proxy
             end
-            unless geoip.traits.is_satellite_provider.nil? then
-              traits_hash['is_satellite_provider'] = geoip.traits.is_satellite_provider
+            unless geoip_city.traits.is_satellite_provider.nil? then
+              traits_hash['is_satellite_provider'] = geoip_city.traits.is_satellite_provider
             end
 
             unless traits_hash.empty? then
@@ -349,11 +349,11 @@ module Fluent
           end
 
           if @connection_type then
-            unless geoip.connection_type.nil? then
+            unless geoip_city.connection_type.nil? then
               if @flatten then
-                record.merge!(to_flatten(geoip.connection_type, [@output_field, 'connection_type'], @field_delimiter))
+                record.merge!(to_flatten(geoip_city.connection_type, [@output_field, 'connection_type'], @field_delimiter))
               else
-                record[@output_field].merge!({'connection_type' => geoip.connection_type})
+                record[@output_field].merge!({'connection_type' => geoip_city.connection_type})
               end
             end
           end
