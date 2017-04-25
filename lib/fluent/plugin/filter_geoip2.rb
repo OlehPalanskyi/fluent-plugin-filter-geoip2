@@ -125,6 +125,8 @@ module Fluent
         download_database @download_asn_url, @md5_asn_url, @database_asn_path, @md5_asn_path
       end
 
+      log.info Dir.pwd
+
       @database_city = MaxMindDB.new(@database_city_path)
     end
 
