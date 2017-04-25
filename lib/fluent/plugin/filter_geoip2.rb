@@ -414,11 +414,11 @@ module Fluent
               autonomous_system_hash['organization'] = geoip_asn.autonomous_system_organization
             end
 
-            unless continent_hash.empty? then
+            unless  autonomous_system_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(continent_hash, [@output_field, 'continent'], @field_delimiter))
+                record.merge!(to_flatten( autonomous_system_hash, [@output_field, 'continent'], @field_delimiter))
               else
-                record[@output_field].merge!({'continent' => continent_hash})
+                record[@output_field].merge!({'continent' =>  autonomous_system_hash})
               end
             end
           end
