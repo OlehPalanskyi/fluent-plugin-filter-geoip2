@@ -467,7 +467,7 @@ module Fluent
             Archive::Tar::Minitar.unpack(gz, './tmp')
           end
           src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
-          FileUtils.mv(src_path, download_dir)
+          FileUtils.mv(src_path, database_dir)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
