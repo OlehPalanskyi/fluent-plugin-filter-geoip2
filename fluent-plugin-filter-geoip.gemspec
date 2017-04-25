@@ -3,14 +3,14 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
-  spec.name          = "fluent-plugin-filter-geoip"
-  spec.version       = "0.5.3"
-  spec.authors       = ["Minoru Osuka"]
-  spec.email         = ["minoru.osuka@gmail.com"]
+  spec.name          = "fluent-plugin-filter-geoip2"
+  spec.version       = "0.0.1"
+  spec.authors       = ["Tokyo Home SOC"]
+  spec.email         = ["github@homesoc.tokyo"]
 
   spec.summary       = "Fluent filter plugin for adding GeoIP data to record."
   spec.description   = "Fluent filter plugin for adding GeoIP data to record. Supports the new Maxmind v2 database formats."
-  spec.homepage      = "https://github.com/mosuka/fluent-plugin-filter-geoip"
+  spec.homepage      = "https://github.com/tokyohomesoc/fluent-plugin-filter-geoip2"
 
   spec.license       = "Apache-2.0"
 

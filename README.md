@@ -1,4 +1,4 @@
-# Fluent::Plugin::GeoIPFilter
+# Fluent::Plugin::GeoIP2Filter
 
 This is a [Fluentd](http://fluentd.org/) filter plugin for adding [GeoIP data](http://dev.maxmind.com/geoip/geoip2/geolite2/) to record. Supports the new Maxmind v2 database formats.
 
@@ -7,7 +7,7 @@ This is a [Fluentd](http://fluentd.org/) filter plugin for adding [GeoIP data](h
 Install it yourself as:
 
 ```
-$ gem install fluent-plugin-filter-geoip
+$ gem install fluent-plugin-filter-geoip2
 ```
 
 ## How to build
@@ -186,7 +186,7 @@ connection_type true
 
 ```
 <filter tail.log>
-  @type geoip
+  @type geoip2
 
   enable_auto_download true
   md5_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5

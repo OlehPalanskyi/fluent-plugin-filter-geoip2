@@ -4,8 +4,8 @@ require 'fileutils'
 require 'open-uri'
 
 module Fluent
-  class GeoIPFilter < Filter
-    Fluent::Plugin.register_filter('geoip', self)
+  class GeoIP2Filter < Filter
+    Fluent::Plugin.register_filter('geoip2', self)
 
     DEFAULT_ENABLE_DOWNLOAD = true
     DEFAULT_MD5_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5'
