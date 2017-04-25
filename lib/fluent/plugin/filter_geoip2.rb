@@ -360,7 +360,7 @@ module Fluent
 
           log.debug "Record: %s" % record.inspect
         else
-          log.warn "It was not possible to look up the #{ip}."
+          log.debug "It was not possible to look up the #{ip}."
         end
       end
 
