@@ -118,7 +118,7 @@ module Fluent
 
       if enable_auto_download then
         download_database @download_city_url, @md5_city_url, @database_city_path, @md5_city_path
-        download_database @download_asn_url, @md5_asn_url, @database_city_path, @md5_asn_path
+        download_database @download_asn_url, @md5_asn_url, @database_asn_path, @md5_asn_path
       end
 
       @database_city = MaxMindDB.new(@database_city_path)
