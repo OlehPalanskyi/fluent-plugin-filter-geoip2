@@ -125,8 +125,6 @@ module Fluent
         download_database @download_asn_url, @md5_asn_url, @database_asn_path, @md5_asn_path
       end
 
-      log.info @database_city_path
-
       @database_city = MaxMindDB.new(@database_city_path)
     end
 
@@ -469,10 +467,7 @@ module Fluent
             end
           end
 
-          src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')[0]
-          log.info Dir.pwd
-          FileUtils.mv(src_path, tmp_database_path)
-          FileUtils.rm_rf('./tmp')
+          src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')[0].to_s
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
           puts e.message
@@ -482,9 +477,10 @@ module Fluent
         temp_md5 = Digest::MD5.hexdigest(File.open(download_path, 'rb').read)
         log.info "New MD5: %s" % temp_md5
         if fetched_md5 == temp_md5 then
-          log.info "Rename: %s to %s" % [tmp_database_path, database_path]
-          FileUtils.mv(tmp_database_path, database_path)
-          log.info "Rename done: %s to %s" % [tmp_database_path, database_path]
+          log.info "Rename: %s to %s" % [src_path, database_path]
+          FileUtils.mv(src_path, database_path)
+          log.info "Rename done: %s to %s" % [src_path, database_path]
+          FileUtils.rm_rf('./tmp')
 
           # record new md5
           log.info "Save: %s" % md5_path
