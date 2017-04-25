@@ -115,7 +115,7 @@ module Fluent
                  :desc => 'If true, to get connection type information (default: %s).' % DEFAULT_CONNECTION_TYPE
 
     config_param :autonomous_system, :bool, :default => DEFAULT_AUTONOMOUS_SYSTEM,
-                 :desc => 'If true, to get connection type information (default: %s).' % DEFAULT_AUTONOMOUS_SYSTEM
+                 :desc => 'Autonomous System Number (default: %s).' % DEFAULT_AUTONOMOUS_SYSTEM
 
 
 
@@ -134,7 +134,7 @@ module Fluent
       end
 
       @database_city = MaxMindDB.new(@database_city_path)
-      @database_asn = MaxMindDB.new(@database_asn_path)
+      @database_asn = MaxMindDB.new(@database_city_path)
     end
 
     def filter(tag, time, record)
@@ -143,8 +143,10 @@ module Fluent
       unless ip.nil? then
 
         geoip_city = {}
+        geoip_asn = {}
         begin
           geoip_city = @database_city.lookup(ip)
+          geoip_asn = @database_asn.lookup(ip)
         rescue IPAddr::InvalidAddressError => e
           # Do nothing if if InvalidAddressError
           return record
@@ -389,23 +391,8 @@ module Fluent
             end
           end
 
-
-        geoip_asn = {}
-        begin
-          geoip_asn = @database_asn.lookup(ip)
-        rescue IPAddr::InvalidAddressError => e
-          # Do nothing if if InvalidAddressError
-          return record
-        end
-
-        if geoip_asn.found? then
-
-          unless @flatten then
-            record.merge!({@output_field => {}})
-          end
-
           if @autonomous_system then
-            autonomous_system_hash = {}
+           autonomous_system_hash = {}
 
             unless geoip_asn.autonomous_system_number.nil? then
               autonomous_system_hash['number'] = geoip_asn.autonomous_system_number
@@ -414,21 +401,22 @@ module Fluent
               autonomous_system_hash['organization'] = geoip_asn.autonomous_system_organization
             end
 
-            unless  autonomous_system_hash.empty? then
+            unless autonomous_system_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten( autonomous_system_hash, [@output_field, 'autonomous_system'], @field_delimiter))
+                record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'autonomous_system'], @field_delimiter))
               else
-                record[@output_field].merge!({'autonomous_system' =>  autonomous_system_hash})
+                record[@output_field].merge!({'autonomous_system' => autonomous_system_hash})
               end
             end
           end
-        end
+
 
           log.debug "Record: %s" % record.inspect
         else
           log.debug "It was not possible to look up the #{ip}."
         end
       end
+
       return record
     end
 
