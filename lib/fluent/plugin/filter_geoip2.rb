@@ -463,11 +463,8 @@ module Fluent
         log.info "PWD %s" % File.expand_path(tmp_database_path)
         begin
           log.info "Unzip: %s" % download_path
-          open(tmp_database_path, 'wb') do |output|
             Zlib::GzipReader.open(download_path) do |gz|
             Archive::Tar::Minitar.unpack(gz, './tmp')
-             output.write(gz.read)
-            end
           end
 
           src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')
