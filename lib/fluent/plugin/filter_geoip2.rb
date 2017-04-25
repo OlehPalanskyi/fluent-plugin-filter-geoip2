@@ -470,7 +470,7 @@ module Fluent
           log.info "src_path %s" % src_path
           log.info "database_path %s" % database_path
           log.info "database_dir %s" % database_dir
-          FileUtils.mv(src_path, database_dir + '/' + File.basename(tmp_database_path))
+          FileUtils.mv(src_path, database_dir)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
@@ -480,12 +480,7 @@ module Fluent
         # check mkd5
         temp_md5 = Digest::MD5.hexdigest(File.open(download_path, 'rb').read)
         log.info "New MD5: %s" % temp_md5
-        db_path = database_dir + '/' + File.basename(tmp_database_path)
         if fetched_md5 == temp_md5 then
-          log.info "Rename: %s to %s" % [db_path, database_path]
-          FileUtils.mv(db_path, database_path)
-          log.info "Rename done: %s to %s" % [db_path, database_path]
-
           # record new md5
           log.info "Save: %s" % md5_path
           File.write(md5_path, fetched_md5)
