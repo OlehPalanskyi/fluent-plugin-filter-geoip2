@@ -462,7 +462,7 @@ module Fluent
         begin
           log.info "Unzip: %s" % download_path
           Archive::Tar::Minitar.unpack(Zlib::GzipReader.new(File.open(download_path , 'rb')), './tmp')
-          FileUtils.mv(Dir.glob('./tmp/' + File.basename("GeoLite2-City.tar.gz", ".tar.gz") + '_*/' + File.basename(database_path))[0],  tmp_database_path)
+          FileUtils.mv(Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(database_path))[0],  tmp_database_path)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
