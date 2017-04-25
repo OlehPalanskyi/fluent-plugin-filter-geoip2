@@ -461,8 +461,12 @@ module Fluent
         tmp_database_path = database_dir + '/tmp_' + File.basename(database_path)
         begin
           log.info "Unzip: %s" % download_path
-          Archive::Tar::Minitar.unpack(Zlib::GzipReader.new(File.open(download_path , 'rb')), './tmp')
-          FileUtils.mv(Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(database_path))[0],  tmp_database_path)
+          open(tmp_database_path, 'wb') do |output|
+            Zlib::GzipReader.new(File.open(download_path)) do |gz|
+              Archive::Tar::Minitar.unpack(gz, './tmp')
+            end
+          end
+          FileUtils.mv(Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path))[0] + '.mmdb' , database_path)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
         rescue => e
