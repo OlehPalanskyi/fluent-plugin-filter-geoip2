@@ -474,7 +474,7 @@ module Fluent
         end
 
         # check mkd5
-        temp_md5 = Digest::MD5.hexdigest(File.open(tmp_database_path, 'rb').read)
+        temp_md5 = Digest::MD5.hexdigest(File.open(download_path, 'rb').read)
         log.info "New MD5: %s" % temp_md5
         if fetched_md5 == temp_md5 then
           log.info "Rename: %s to %s" % [tmp_database_path, database_path]
