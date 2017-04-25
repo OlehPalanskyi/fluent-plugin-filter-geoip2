@@ -125,7 +125,7 @@ module Fluent
         download_database @download_asn_url, @md5_asn_url, @database_asn_path, @md5_asn_path
       end
 
-      log.info Dir.pwd
+      log.info @database_city_path
 
       @database_city = MaxMindDB.new(@database_city_path)
     end
@@ -470,6 +470,7 @@ module Fluent
           end
 
           src_path = Dir.glob('./tmp/' + File.basename(download_path, ".tar.gz") + '_*/' + File.basename(download_path, ".tar.gz")  + '.mmdb')[0]
+          log.info Dir.pwd
           FileUtils.mv(src_path, tmp_database_path)
           FileUtils.rm_rf('./tmp')
           log.info "Unzip done: %s" % tmp_database_path
