@@ -58,11 +58,11 @@ module Fluent
     config_param :download_asn_url, :string, :default => DEFAULT_DOWNLOAD_ASN_URL,
                  :desc => 'GeoIP2 database download URL (default: %s).' % DEFAULT_DOWNLOAD_ASN_URL
 
-    config_param :md5_asn_path, :string, :default => DEFAULT_MD5_CITY_PATH,
-                 :desc => 'GeoIP2 MD5 checksum path. (default: %s)' % DEFAULT_MD5_CITY_PATH
+    config_param :md5_asn_path, :string, :default => DEFAULT_MD5_ASN_PATH,
+                 :desc => 'GeoIP2 MD5 checksum path. (default: %s)' % DEFAULT_MD5_ASN_PATH
 
-    config_param :database_asn_path, :string, :default => DEFAULT_DATABASE_CITY_PATH,
-                 :desc => 'GeoIP2 database path. (default: %s)' % DEFAULT_DATABASE_CITY_PATH
+    config_param :database_asn_path, :string, :default => DEFAULT_DATABASE_ASN_PATH,
+                 :desc => 'GeoIP2 database path. (default: %s)' % DEFAULT_DATABASE_ASN_PATH
 
     config_param :lookup_field, :string, :default => DEFAULT_LOOKUP_FIELD,
                  :desc => 'Specify the field name that IP address is stored (default: %s).' % DEFAULT_LOOKUP_FIELD
