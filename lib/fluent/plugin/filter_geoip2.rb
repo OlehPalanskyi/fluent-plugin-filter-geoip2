@@ -4,7 +4,7 @@ require 'fileutils'
 require 'open-uri'
 
 module Fluent
-  class geoip2Filter < Filter
+  class GeoIP2Filter < Filter
     Fluent::Plugin.register_filter('geoip2', self)
 
     DEFAULT_ENABLE_DOWNLOAD = true
