@@ -459,6 +459,8 @@ module Fluent
 
         # unzip new database temporaly
         tmp_database_path = database_dir + '/tmp_' + File.basename(database_path)
+        log.info "temp_database_path: %s" %  tmp_database_path
+        log.info "PWD %s" % File.expand_path(tmp_database_path)
         begin
           log.info "Unzip: %s" % download_path
           open(tmp_database_path, 'wb') do |output|
