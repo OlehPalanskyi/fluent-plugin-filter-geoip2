@@ -40,6 +40,7 @@ module Fluent
     DEFAULT_SUBDIVISIONS = false
     DEFAULT_TRAITS = false
     DEFAULT_CONNECTION_TYPE = false
+    DEFAULT_AUTONOMOUS_SYSTEM = true
 
     config_param :enable_auto_download, :bool, :default => DEFAULT_ENABLE_DOWNLOAD,
                  :desc => 'If true, enable to download GeoIP2 database autometically (default: %s).' % DEFAULT_ENABLE_DOWNLOAD
@@ -113,6 +114,13 @@ module Fluent
     config_param :connection_type, :bool, :default => DEFAULT_CONNECTION_TYPE,
                  :desc => 'If true, to get connection type information (default: %s).' % DEFAULT_CONNECTION_TYPE
 
+    config_param :autonomous_system, :bool, :default => DEFAULT_AUTONOMOUS_SYSTEM,
+                 :desc => 'If true, to get connection type information (default: %s).' % DEFAULT_AUTONOMOUS_SYSTEM
+
+
+
+
+
     def initialize
       super
     end
@@ -126,6 +134,7 @@ module Fluent
       end
 
       @database_city = MaxMindDB.new(@database_city_path)
+      @database_asn = MaxMindDB.new(@database_asn_path)
     end
 
     def filter(tag, time, record)
@@ -380,12 +389,46 @@ module Fluent
             end
           end
 
+
+        geoip_asn = {}
+        begin
+          geoip_asn = @database_asn.lookup(ip)
+        rescue IPAddr::InvalidAddressError => e
+          # Do nothing if if InvalidAddressError
+          return record
+        end
+
+        if geoip_asn.found? then
+
+          unless @flatten then
+            record.merge!({@output_field => {}})
+          end
+
+          if @autonomous_system then
+            autonomous_system_hash = {}
+
+            unless geoip_asn.autonomous_system_number.nil? then
+              autonomous_system_hash['number'] = geoip_asn.autonomous_system_number
+            end
+            unless geoip_asn.autonomous_system_organization.nil? then
+              autonomous_system_hash['organization'] = geoip_asn.autonomous_system_organization
+            end
+
+            unless continent_hash.empty? then
+              if @flatten then
+                record.merge!(to_flatten(continent_hash, [@output_field, 'continent'], @field_delimiter))
+              else
+                record[@output_field].merge!({'continent' => continent_hash})
+              end
+            end
+          end
+        end
+
           log.debug "Record: %s" % record.inspect
         else
           log.debug "It was not possible to look up the #{ip}."
         end
       end
-
       return record
     end
 
