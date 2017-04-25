@@ -9,10 +9,15 @@ module Fluent
 
     DEFAULT_ENABLE_DOWNLOAD = true
 
-    DEFAULT_MD5_CITY_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5'
-    DEFAULT_DOWNLOAD_CITY_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz'
+    DEFAULT_MD5_CITY_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz.md5'
+    DEFAULT_DOWNLOAD_CITY_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz'
     DEFAULT_MD5_CITY_PATH = './geoip/database/GeoLite2-City.md5'
     DEFAULT_DATABASE_CITY_PATH = './geoip/database/GeoLite2-City.mmdb'
+
+    DEFAULT_MD5_ASN_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz.md5'
+    DEFAULT_DOWNLOAD_ASN_URL = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz'
+    DEFAULT_MD5_ASN_PATH = './geoip/database/GeoLite2-ASN.md5'
+    DEFAULT_DATABASE_ASN_PATH = './geoip/database/GeoLite2-ASN.mmdb'
 
     DEFAULT_LOOKUP_FIELD = 'ip'
     DEFAULT_OUTPU_FIELD = 'geoip'
@@ -45,6 +50,18 @@ module Fluent
                  :desc => 'GeoIP2 MD5 checksum path. (default: %s)' % DEFAULT_MD5_CITY_PATH
 
     config_param :database_city_path, :string, :default => DEFAULT_DATABASE_CITY_PATH,
+                 :desc => 'GeoIP2 database path. (default: %s)' % DEFAULT_DATABASE_CITY_PATH
+
+    config_param :md5_asn_url, :string, :default => DEFAULT_MD5_ASN_URL,
+                 :desc => 'GeoIP2 MD5 checksum URL (default: %s)' % DEFAULT_MD5_ASN_URL
+
+    config_param :download_asn_url, :string, :default => DEFAULT_DOWNLOAD_ASN_URL,
+                 :desc => 'GeoIP2 database download URL (default: %s).' % DEFAULT_DOWNLOAD_ASN_URL
+
+    config_param :md5_asn_path, :string, :default => DEFAULT_MD5_CITY_PATH,
+                 :desc => 'GeoIP2 MD5 checksum path. (default: %s)' % DEFAULT_MD5_CITY_PATH
+
+    config_param :database_asn_path, :string, :default => DEFAULT_DATABASE_CITY_PATH,
                  :desc => 'GeoIP2 database path. (default: %s)' % DEFAULT_DATABASE_CITY_PATH
 
     config_param :lookup_field, :string, :default => DEFAULT_LOOKUP_FIELD,
@@ -101,6 +118,7 @@ module Fluent
 
       if enable_auto_download then
         download_database @download_city_url, @md5_city_url, @database_city_path, @md5_city_path
+        download_database @download_asn_url, @md5_asn_url, @database_city_path, @md5_asn_path
       end
 
       @database_city = MaxMindDB.new(@database_city_path)
