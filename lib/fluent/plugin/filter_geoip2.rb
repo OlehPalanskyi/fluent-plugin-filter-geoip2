@@ -391,15 +391,12 @@ module Fluent
             end
           end
 
+        if geoip_asn.found? then
           if @autonomous_system then
            autonomous_system_hash = {}
 
-            unless geoip_asn.autonomous_system_number.nil? then
-              autonomous_system_hash['number'] = geoip_asn.autonomous_system_number
-            end
-            unless geoip_asn.autonomous_system_organization.nil? then
-              autonomous_system_hash['organization'] = geoip_asn.autonomous_system_organization
-            end
+           autonomous_system_hash['number'] = geoip_asn['autonomous_system_number']
+           autonomous_system_hash['organization'] = geoip_asn['autonomous_system_organization']
 
             unless autonomous_system_hash.empty? then
               if @flatten then
@@ -409,7 +406,7 @@ module Fluent
               end
             end
           end
-
+        end
 
           log.debug "Record: %s" % record.inspect
         else
