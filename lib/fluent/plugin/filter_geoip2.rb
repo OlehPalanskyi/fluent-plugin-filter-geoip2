@@ -134,7 +134,7 @@ module Fluent
       end
 
       @database_city = MaxMindDB.new(@database_city_path)
-      @database_asn = MaxMindDB.new(@database_city_path)
+      @database_asn = MaxMindDB.new(@database_asn_path)
     end
 
     def filter(tag, time, record)
@@ -391,22 +391,22 @@ module Fluent
             end
           end
 
-        if geoip_asn.found? then
-          if @autonomous_system then
-           autonomous_system_hash = {}
+          if geoip_asn.found? then
+            if @autonomous_system then
+              autonomous_system_hash = {}
 
-           autonomous_system_hash['number'] = geoip_asn['autonomous_system_number']
-           autonomous_system_hash['organization'] = geoip_asn['autonomous_system_organization']
+              autonomous_system_hash['number'] = geoip_asn['autonomous_system_number']
+              autonomous_system_hash['organization'] = geoip_asn['autonomous_system_organization']
 
-            unless autonomous_system_hash.empty? then
-              if @flatten then
-                record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'autonomous_system'], @field_delimiter))
-              else
-                record[@output_field].merge!({'autonomous_system' => autonomous_system_hash})
+              unless autonomous_system_hash.empty? then
+                if @flatten then
+                  record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'autonomous_system'], @field_delimiter))
+                else
+                  record[@output_field].merge!({'autonomous_system' => autonomous_system_hash})
+                end
               end
             end
           end
-        end
 
           log.debug "Record: %s" % record.inspect
         else
