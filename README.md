@@ -32,18 +32,18 @@ enable_auto_download true
 
 ### md5_url
 
-GeoIP2 MD5 checksum URL (default: http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5)
+GeoIP2 MD5 checksum URL (default: http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz.md5)
 
 ```
-md5_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5
+md5_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz.md5
 ```
 
 ### download_url
 
-GeoIP2 database download URL (default: http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz).
+GeoIP2 database download URL (default: http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz).
 
 ```
-download_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
+download_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
 ```
 
 ### md5_path
@@ -60,6 +60,38 @@ GeoIP2 database path. (default: ./geoip/database/GeoLite2-City.md5)
 
 ```
 database_path ./geoip/database/GeoLite2-City.mmdb
+```
+
+### md5_asn_url
+
+GeoIP2 MD5 checksum URL (default: http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz.md5)
+
+```
+md5_asn_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz.md5
+```
+
+### download_asn_url
+
+GeoIP2 database download URL (default: http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz).
+
+```
+download_asn_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz
+```
+
+### md5_asn_path
+
+GeoIP2 MD5 checksum path. (default: ./geoip/database/GeoLite2-ASN.md5)
+
+```
+md5_asn_path ./geoip/database/GeoLite2-ASN.md5
+```
+
+### database_asn_path
+
+GeoIP2 database path. (default: ./geoip/database/GeoLite2-ASN.mmdb)
+
+```
+database_asn_path ./geoip/database/GeoLite2-ASN.mmdb
 ```
 
 ### lookup_field
@@ -136,51 +168,60 @@ location true
 
 ### postal
 
-If true, to get postal information (default: true).
+If true, to get postal information (default: fasle).
 
 ```
-postal true
+postal false
 ```
 
 ### registered_country
 
-If true, to get registered country information (default: true).
+If true, to get registered country information (default: false).
 
 ```
-registered_country true
+registered_country false
 ```
 
 ### represented_country
 
-If true, to get represented country information (default: true).
+If true, to get represented country information (default: false).
 
 ```
-represented_country true
+represented_country false
 ```
 
 ### subdivisions
 
-If true, to get subdivisions information (default: true).
+If true, to get subdivisions information (default: false).
 
 ```
-subdivisions true
+subdivisions false
 ```
 
 ### traits
 
-If true, to get traits information (default: true).
+If true, to get traits information (default: false).
 
 ```
-traits true
+traits false
 ```
 
 ### connection_type
 
-If true, to get connection type information (default: true).
+If true, to get connection type information (default: false).
 
 ```
-connection_type true
+connection_type false
 ```
+
+### Autonomous System
+
+Autonomous System (default: true).
+
+```
+autonomous_system true
+```
+
 
 ## Plugin setup examples
 
@@ -189,10 +230,6 @@ connection_type true
   @type geoip2
 
   enable_auto_download true
-  md5_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5
-  download_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
-  md5_path ./geoip/database/GeoLite2-City.md5
-  database_path ./geoip/database/GeoLite2-City.mmdb
 
   lookup_field clientip
   output_field geoip
@@ -200,17 +237,6 @@ connection_type true
   flatten false
 
   locale en
-
-  continent true
-  country true
-  city true
-  location true
-  postal true
-  registered_country true
-  represented_country true
-  subdivisions true
-  traits true
-  connection_type true
 </filter>
 ```
 
@@ -226,37 +252,27 @@ then output bocomes as belows:
 
 ```javascript
 {
-  "clientip": "200.114.49.218",
+  "ufw_ips": "106.154.25.44",
   "geoip": {
     "continent": {
-      "code": "SA",
-      "geoname_id": 6255150,
-      "name": "South America"
+      "code": "AS",
+      "geoname_id": 6255147,
+      "name": "Asia"
     },
     "country": {
-      "geoname_id": 3686110,
-      "iso_code": "CO",
-      "name": "Colombia"
-    },
-    "city": {
-      "geoname_id": 3674962,
-      "name": "Medellín"
+      "geoname_id": 1861060,
+      "iso_code": "JP",
+      "name": "Japan"
     },
     "location": {
-      "latitude": 6.2518,
-      "longitude": -75.5636,
-      "time_zone": "America/Bogota"
+      "latitude": 35.69,
+      "longitude": 139.69,
+      "time_zone": "Asia/Tokyo"
     },
-    "registered_country": {
-      "geoname_id": 3686110,
-      "iso_code": "CO",
-      "name": "Colombia"
-    },
-    "subdivisions": [{
-      "geoname_id": 3689815,
-      "iso_code": "ANT",
-      "name": "Antioquia"
-    }]
+    "autonomous_system": {
+      "number": 2516,
+      "organization": "KDDI CORPORATION"
+    }
   }
 }
 ```
@@ -270,7 +286,7 @@ Start fluentd using example fluent.conf.
 $ fluentd -c ~/github/fluent-plugin-filter-geoip/fluent.conf
 2017-03-13 15:11:31 +0900 [info]: reading config file path="/Users/mosuka/github/fluent-plugin-filter-geoip/fluent.conf"
 2017-03-13 15:11:31 +0900 [info]: starting fluentd-0.12.33
-2017-03-13 15:11:31 +0900 [info]: gem 'fluent-plugin-filter-geoip' version '0.5.3'
+2017-03-13 15:11:31 +0900 [info]: gem 'fluent-plugin-filter-geoip' version '0.0.1'
 2017-03-13 15:11:31 +0900 [info]: gem 'fluent-plugin-grok-parser' version '1.0.0'
 2017-03-13 15:11:31 +0900 [info]: gem 'fluent-plugin-output-solr' version '0.4.0'
 2017-03-13 15:11:31 +0900 [info]: gem 'fluent-plugin-ua-parser' version '1.1.0'
@@ -289,43 +305,17 @@ $ fluentd -c ~/github/fluent-plugin-filter-geoip/fluent.conf
   <filter messages>
     @type geoip
     enable_auto_download true
-    md5_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.md5
-    download_url http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz
-    md5_path ./geoip/database/GeoLite2-City.md5
-    database_path ./geoip/database/GeoLite2-City.mmdb
     lookup_field clientip
     output_field geoip
     field_delimiter .
     flatten false
     locale en
-    continent true
-    country true
-    city true
-    location true
-    postal true
-    registered_country true
-    represented_country true
-    subdivisions true
-    traits true
-    connection_type true
   </filter>
   <match messages>
     type stdout
   </match>
 </ROOT>
 2017-03-13 15:11:32 +0900 [info]: listening fluent socket on 0.0.0.0:24224
-```
-
-Send message via `fluent-cat`.
-
-```
-$ echo '{"clientip": "200.114.49.218"}' | fluent-cat messages
-```
-
-Fluentd outputs message in standard output.
-
-```
-2017-03-13 15:13:02 +0900 messages: {"clientip":"200.114.49.218","geoip":{"continent":{"code":"SA","geoname_id":6255150,"name":"South America"},"country":{"geoname_id":3686110,"iso_code":"CO","name":"Colombia"},"city":{"geoname_id":3674962,"name":"Medellín"},"location":{"latitude":6.2518,"longitude":-75.5636,"time_zone":"America/Bogota"},"registered_country":{"geoname_id":3686110,"iso_code":"CO","name":"Colombia"},"subdivisions":[{"geoname_id_0":3689815,"iso_code_0":"ANT","name_0":"Antioquia"}]}}
 ```
 
 ## Development

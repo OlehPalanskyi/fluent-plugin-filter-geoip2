@@ -115,7 +115,7 @@ module Fluent
                  :desc => 'If true, to get connection type information (default: %s).' % DEFAULT_CONNECTION_TYPE
 
     config_param :autonomous_system, :bool, :default => DEFAULT_AUTONOMOUS_SYSTEM,
-                 :desc => 'Autonomous System Number (default: %s).' % DEFAULT_AUTONOMOUS_SYSTEM
+                 :desc => 'Autonomous System (default: %s).' % DEFAULT_AUTONOMOUS_SYSTEM
 
 
 
