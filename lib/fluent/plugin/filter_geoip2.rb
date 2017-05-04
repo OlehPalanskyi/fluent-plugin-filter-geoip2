@@ -236,6 +236,9 @@ module Fluent
           if @location then
             location_hash = {}
 
+            unless geoip_city.location.latitude.nil? or geoip_city.location.longitude.nil? then
+               location_hash['coordinates'] = geoip_city.location.latitude, geoip_city.location.longitude
+            end
             unless geoip_city.location.latitude.nil? then
               location_hash['latitude'] = geoip_city.location.latitude
             end
