@@ -2,9 +2,7 @@ require 'maxminddb'
 require 'json'
 require 'fileutils'
 require 'open-uri'
-
 require 'zlib'
-require 'archive/tar/minitar'
 require 'fileutils'
 
 module Fluent
