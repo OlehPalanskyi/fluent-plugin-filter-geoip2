@@ -210,23 +210,23 @@ module Fluent
             city_hash = {}
 
             unless geoip_city.city.code.nil? then
-              city_hash['code'] = geoip_city.city.code
+              city_hash['city_code'] = geoip_city.city.code
             end
             unless geoip_city.city.geoname_id.nil? then
-              city_hash['geoname_id'] = geoip_city.city.geoname_id
+              city_hash['city_geoname_id'] = geoip_city.city.geoname_id
             end
             unless geoip_city.city.iso_code.nil? then
-              city_hash['iso_code'] = geoip_city.city.iso_code
+              city_hash['city_iso_code'] = geoip_city.city.iso_code
             end
             unless geoip_city.city.name(@locale).nil? then
-              city_hash['name'] = geoip_city.city.name(@locale)
+              city_hash['city'] = geoip_city.city.name(@locale)
             end
 
             unless city_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(city_hash, [@output_field, 'city'], @field_delimiter))
+                record.merge!(to_flatten(city_hash, [@output_field], @field_delimiter))
               else
-                record[@output_field].merge!({'city' => city_hash})
+                record[@output_field].merge!(city_hash)
               end
             end
           end
