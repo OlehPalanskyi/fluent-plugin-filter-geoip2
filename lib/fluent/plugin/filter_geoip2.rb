@@ -401,9 +401,9 @@ module Fluent
 
               unless autonomous_system_hash.empty? then
                 if @flatten then
-                  record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'autonomous_system'], @field_delimiter))
+                  record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'asn'], @field_delimiter))
                 else
-                  record[@output_field].merge!({'autonomous_system' => autonomous_system_hash})
+                  record[@output_field].merge!({'asn' => autonomous_system_hash})
                 end
               end
             end
