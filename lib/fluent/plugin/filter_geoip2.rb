@@ -235,7 +235,7 @@ module Fluent
             location_hash = {}
 
             unless geoip_city.location.latitude.nil? or geoip_city.location.longitude.nil? then
-               location_hash['location'] = geoip_city.location.latitude, geoip_city.location.longitude
+               location_hash['coordinates'] = geoip_city.location.latitude, geoip_city.location.longitude
             end
             unless geoip_city.location.latitude.nil? then
               location_hash['latitude'] = geoip_city.location.latitude
@@ -252,9 +252,9 @@ module Fluent
 
             unless location_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(location_hash, [@output_field, 'geo'], @field_delimiter))
+                record.merge!(to_flatten(location_hash, [@output_field, 'location'], @field_delimiter))
               else
-                record[@output_field].merge!({'geo' => location_hash})
+                record[@output_field].merge!({'location' => location_hash})
               end
             end
           end
