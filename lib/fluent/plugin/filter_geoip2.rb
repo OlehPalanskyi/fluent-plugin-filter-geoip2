@@ -252,9 +252,9 @@ module Fluent
 
             unless location_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(location_hash, [@output_field, 'geoip'], @field_delimiter))
+                record.merge!(to_flatten(location_hash, [@output_field, 'geo'], @field_delimiter))
               else
-                record[@output_field].merge!({'geoip' => location_hash})
+                record[@output_field].merge!({'geo' => location_hash})
               end
             end
           end
