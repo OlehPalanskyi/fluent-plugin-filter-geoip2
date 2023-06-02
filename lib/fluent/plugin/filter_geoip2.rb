@@ -185,23 +185,23 @@ module Fluent
             country_hash = {}
 
             unless geoip_city.country.code.nil? then
-              country_hash['code'] = geoip_city.country.code
+              country_hash['country_code'] = geoip_city.country.code
             end
             unless geoip_city.country.geoname_id.nil? then
-              country_hash['geoname_id'] = geoip_city.country.geoname_id
+              country_hash['country_geoname_id'] = geoip_city.country.geoname_id
             end
             unless geoip_city.country.iso_code.nil? then
-              country_hash['iso_code'] = geoip_city.country.iso_code
+              country_hash['country'] = geoip_city.country.iso_code
             end
             unless geoip_city.country.name(@locale).nil? then
-              country_hash['name'] = geoip_city.country.name(@locale)
+              country_hash['country_name'] = geoip_city.country.name(@locale)
             end
 
             unless country_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(country_hash, [@output_field, 'country'], @field_delimiter))
+                record.merge!(to_flatten(country_hash, [@output_field], @field_delimiter))
               else
-                record[@output_field].merge!({'country' => country_hash})
+                record[@output_field].merge!(country_hash)
               end
             end
           end
