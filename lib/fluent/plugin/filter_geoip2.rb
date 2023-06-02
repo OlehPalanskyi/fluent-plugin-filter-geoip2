@@ -160,23 +160,23 @@ module Fluent
             continent_hash = {}
 
             unless geoip_city.continent.code.nil? then
-              continent_hash['code'] = geoip_city.continent.code
+              continent_hash['continent_code'] = geoip_city.continent.code
             end
             unless geoip_city.continent.geoname_id.nil? then
-              continent_hash['geoname_id'] = geoip_city.continent.geoname_id
+              continent_hash['continent_geoname_id'] = geoip_city.continent.geoname_id
             end
             unless geoip_city.continent.iso_code.nil? then
-              continent_hash['iso_code'] = geoip_city.continent.iso_code
+              continent_hash['continent_iso_code'] = geoip_city.continent.iso_code
             end
             unless geoip_city.continent.name(@locale).nil? then
-              continent_hash['name'] = geoip_city.continent.name(@locale)
+              continent_hash['continent_name'] = geoip_city.continent.name(@locale)
             end
 
             unless continent_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(continent_hash, [@output_field, 'continent'], @field_delimiter))
+                record.merge!(to_flatten(continent_hash, [@output_field], @field_delimiter))
               else
-                record[@output_field].merge!({'continent' => continent_hash})
+                record[@output_field].merge!(continent_hash)
               end
             end
           end
@@ -263,14 +263,14 @@ module Fluent
             postal_hash = {}
 
             unless geoip_city.postal.code.nil? then
-              postal_hash['code'] = geoip_city.postal.code
+              postal_hash['postal_code'] = geoip_city.postal.code
             end
 
             unless postal_hash.empty? then
               if @flatten then
-                record.merge!(to_flatten(postal_hash, [@output_field, 'postal'], @field_delimiter))
+                record.merge!(to_flatten(postal_hash, [@output_field], @field_delimiter))
               else
-                record[@output_field].merge!({'postal' => postal_hash})
+                record[@output_field].merge!(postal_hash)
               end
             end
           end
@@ -379,7 +379,6 @@ module Fluent
               else
                 record[@output_field].merge!({'traits' => traits_hash})
               end
-            end
           end
 
           if @connection_type then
@@ -401,9 +400,9 @@ module Fluent
 
               unless autonomous_system_hash.empty? then
                 if @flatten then
-                  record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'asn'], @field_delimiter))
+                  record.merge!(to_flatten(autonomous_system_hash, [@output_field, 'as'], @field_delimiter))
                 else
-                  record[@output_field].merge!({'asn' => autonomous_system_hash})
+                  record[@output_field].merge!({'as' => autonomous_system_hash})
                 end
               end
             end
