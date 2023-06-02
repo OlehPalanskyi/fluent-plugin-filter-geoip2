@@ -379,6 +379,7 @@ module Fluent
               else
                 record[@output_field].merge!({'traits' => traits_hash})
               end
+            end
           end
 
           if @connection_type then
